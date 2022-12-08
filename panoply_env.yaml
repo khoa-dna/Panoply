@@ -1,0 +1,4 @@
+name: panoply_env
+channels:
+  - defaults
+prefix: C:\Users\khoah\anaconda3\envs\panoply_env
