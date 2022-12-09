@@ -93,8 +93,8 @@ class View(ttk.Frame):
         self.run_frame.grid(row = 0, column = 1)
         self.plot_frame.grid(row = 1, column =1)
         self.canvas_frame.grid(row = 0, column = 1, rowspan=2)
-        self.option_frame.grid(row = 0, column = 0,  sticky="ew")
-        self.download_frame.grid(row = 1, column = 0, sticky="ew")
+        self.option_frame.grid(row = 0, column = 0)
+        self.download_frame.grid(row = 1, column = 0)
         
         sep = ttk.Separator(self.param_frame,orient='vertical')
         sep.grid(column = 6, row = 0, rowspan = 2, sticky ="n", padx= 10)
