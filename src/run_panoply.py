@@ -77,8 +77,10 @@ class View(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         
-        self.input_frame = Input_Frame(self)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=5)
 
+        self.input_frame = Input_Frame(self)
         self.control_frame = Control_Frame(self)
         self.param_frame = Params_Frame(self.control_frame)
         self.run_frame = Run_Frame(self.control_frame)
@@ -88,10 +90,10 @@ class View(ttk.Frame):
         self.canvas_frame = Canvas_Frame(self.plot_frame)
 
         self.input_frame.grid(row = 0, column = 0, rowspan=2, sticky="news")
-        self.control_frame.grid(row = 0, column =1)
+        self.control_frame.grid(row = 0, column =1, columnspan=5)
         self.param_frame.grid(row = 0, column = 0)
         self.run_frame.grid(row = 0, column = 1)
-        self.plot_frame.grid(row = 1, column =1)
+        self.plot_frame.grid(row = 1, column =1, columnspan=5)
         self.canvas_frame.grid(row = 0, column = 1, rowspan=2)
         self.option_frame.grid(row = 0, column = 0)
         self.download_frame.grid(row = 1, column = 0)
