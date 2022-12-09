@@ -41,6 +41,19 @@ class App(tk.Tk):
         super().__init__()
         self.title("Panel Maker")
 
+        # get the screen dimension
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        # set window dimension 
+        window_width = int(screen_width * 0.8)
+        window_height = int(screen_height * 0.7)
+        # find the center point
+        center_x = int(screen_width/2 - window_width / 2)
+        center_y = int(screen_height/2 - window_height / 2)
+        # set the position of the window to the center of the screen
+        self.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
+
+
 class Model():
     def __init__(self,
                  file_input_paths,
@@ -71,14 +84,14 @@ class View(ttk.Frame):
         self.download_frame = Download_Frame(self.plot_frame)
         self.canvas_frame = Canvas_Frame(self.plot_frame)
 
-        self.input_frame.grid(row = 0, column = 0, rowspan=2)
+        self.input_frame.grid(row = 0, column = 0, rowspan=2, sticky="news")
         self.control_frame.grid(row = 0, column =1)
         self.param_frame.grid(row = 0, column = 0)
         self.run_frame.grid(row = 0, column = 1)
         self.plot_frame.grid(row = 1, column =1)
         self.canvas_frame.grid(row = 0, column = 1, rowspan=2)
-        self.option_frame.grid(row = 0, column = 0, sticky="w")
-        self.download_frame.grid(row = 1, column = 0)
+        self.option_frame.grid(row = 0, column = 0,  sticky="ew")
+        self.download_frame.grid(row = 1, column = 0, sticky="ew")
         
         sep = ttk.Separator(self.param_frame,orient='vertical')
         sep.grid(column = 6, row = 0, rowspan = 2, sticky ="n", padx= 10)
@@ -806,7 +819,6 @@ class Controller:
 
 if __name__ == "__main__":
     app = App()
-    app.attributes("-topmost",True)
     view = View(app)
     model = Model({},{},{})
     controller = Controller(model, view)
