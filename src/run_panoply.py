@@ -54,7 +54,7 @@ class App(tk.Tk):
         # set the position of the window to the center of the screen
         self.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 
-        CONFIG_PARAM["load_button_width"] = int(window_width*0.025)
+        CONFIG_PARAM["load_button_width"] = int(window_width*0.020)
         CONFIG_PARAM["spinbox_width"] = int(window_width*0.01)
 
 class Model():
