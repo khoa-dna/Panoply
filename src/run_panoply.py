@@ -35,11 +35,27 @@ from tqdm import tqdm
 
 import datetime
 
+CONFIG_PARAM = {}
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Panel Maker")
+
+        # get the screen dimension
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        # set window dimension 
+        window_width = int(screen_width * 0.85)
+        window_height = int(screen_height * 0.7)
+        # find the center point
+        center_x = int(screen_width/2 - window_width / 2)
+        center_y = int(screen_height/2 - window_height / 2)
+        # set the position of the window to the center of the screen
+        self.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
+
+        CONFIG_PARAM["load_button_width"] = int(window_width*0.020)
+        CONFIG_PARAM["spinbox_width"] = int(window_width*0.01)
 
 class Model():
     def __init__(self,
@@ -61,8 +77,10 @@ class View(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         
-        self.input_frame = Input_Frame(self)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=5)
 
+        self.input_frame = Input_Frame(self)
         self.control_frame = Control_Frame(self)
         self.param_frame = Params_Frame(self.control_frame)
         self.run_frame = Run_Frame(self.control_frame)
@@ -71,13 +89,13 @@ class View(ttk.Frame):
         self.download_frame = Download_Frame(self.plot_frame)
         self.canvas_frame = Canvas_Frame(self.plot_frame)
 
-        self.input_frame.grid(row = 0, column = 0, rowspan=2)
-        self.control_frame.grid(row = 0, column =1)
+        self.input_frame.grid(row = 0, column = 0, rowspan=2, sticky="news")
+        self.control_frame.grid(row = 0, column =1, columnspan=5)
         self.param_frame.grid(row = 0, column = 0)
         self.run_frame.grid(row = 0, column = 1)
-        self.plot_frame.grid(row = 1, column =1)
+        self.plot_frame.grid(row = 1, column =1, columnspan=5)
         self.canvas_frame.grid(row = 0, column = 1, rowspan=2)
-        self.option_frame.grid(row = 0, column = 0, sticky="w")
+        self.option_frame.grid(row = 0, column = 0)
         self.download_frame.grid(row = 1, column = 0)
         
         sep = ttk.Separator(self.param_frame,orient='vertical')
@@ -102,7 +120,7 @@ class Input_Frame(ttk.Frame):
         self.load_config_button = ttk.Button(self,
                                              text = "Load Config File",
                                              command = self.load_config_file,
-                                             width = 30)
+                                             width = CONFIG_PARAM["load_button_width"])
         self.load_config_button.pack()
         self.config_file_label = ttk.Label(self)
         self.config_file_label.config(text = "Config File:")
@@ -111,7 +129,7 @@ class Input_Frame(ttk.Frame):
         self.abundance_button = ttk.Button(self, 
                                           text="Load Marker Abundance File",
                                           command = lambda: self.button_load_file("Abundance"),
-                                          width=30)
+                                          width = CONFIG_PARAM["load_button_width"])
         
         self.abundance_button.pack()
         
@@ -123,7 +141,7 @@ class Input_Frame(ttk.Frame):
         self.brightness_button = ttk.Button(self, 
                                            text="Load Fluor Brightness File",
                                            command = lambda: self.button_load_file("Brightness"),
-                                           width = 30)
+                                           width = CONFIG_PARAM["load_button_width"])
         self.brightness_button.pack()
         
         self.brightness_file_label = ttk.Label(self)
@@ -134,7 +152,7 @@ class Input_Frame(ttk.Frame):
         self.target_button = ttk.Button(self, 
                                           text="Load Marker Target File",
                                           command = lambda: self.button_load_file("Target"),
-                                          width = 30)
+                                          width = CONFIG_PARAM["load_button_width"])
         self.target_button.pack()
         
         self.target_file_label = ttk.Label(self)
@@ -144,7 +162,7 @@ class Input_Frame(ttk.Frame):
         self.spectra_button = ttk.Button(self, 
                                           text="Load Spectra File",
                                           command = lambda: self.button_load_file("Spectra"),
-                                          width = 30)
+                                          width = CONFIG_PARAM["load_button_width"])
         self.spectra_button.pack()
         
         self.spectra_file_label = ttk.Label(self)
@@ -154,7 +172,7 @@ class Input_Frame(ttk.Frame):
         self.database_button = ttk.Button(self, 
                                           text="Load Database File",
                                           command = lambda: self.button_load_file("Database"),
-                                          width = 30)
+                                          width = CONFIG_PARAM["load_button_width"])
         self.database_button.pack()
         
         self.database_file_label = ttk.Label(self)
@@ -227,6 +245,7 @@ class Params_Frame(ttk.Frame):
 
         intensity_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=1,
             textvariable=self.intensity_weight,
@@ -236,6 +255,7 @@ class Params_Frame(ttk.Frame):
                                                  float(self.intensity_weight.get())))
         corr_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=1,
             textvariable=self.corr_weight,
@@ -245,6 +265,7 @@ class Params_Frame(ttk.Frame):
                                                  float(self.corr_weight.get())))
         random_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=1,
             textvariable=self.random_prob,
@@ -254,6 +275,7 @@ class Params_Frame(ttk.Frame):
                                                  float(self.random_prob.get())))
         risk_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=1,
             textvariable=self.risk_prob,
@@ -263,6 +285,7 @@ class Params_Frame(ttk.Frame):
                                                  float(self.risk_prob.get())))
         frontier_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=10,
             textvariable=self.frontier_size,
@@ -272,6 +295,7 @@ class Params_Frame(ttk.Frame):
                                                  int(self.frontier_size.get())))
         branch_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=10,
             textvariable=self.branch_num,
@@ -311,6 +335,7 @@ class Params_Frame(ttk.Frame):
 
         sample_size_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=100000,
             textvariable=self.sample_size,
@@ -320,6 +345,7 @@ class Params_Frame(ttk.Frame):
                                                  float(self.sample_size.get())))
         intensity_factor_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=100000,
             textvariable=self.intensity_factor,
@@ -329,6 +355,7 @@ class Params_Frame(ttk.Frame):
                                                  float(self.intensity_factor.get())))
         auto_intensity_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=100000,
             textvariable=self.auto_intensity,
@@ -338,6 +365,7 @@ class Params_Frame(ttk.Frame):
                                                  float(self.auto_intensity.get())))
         noise_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=1,
             textvariable=self.noise,
@@ -347,6 +375,7 @@ class Params_Frame(ttk.Frame):
                                                  float(self.noise.get())))
         positive_fraction_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=1,
             textvariable=self.positive_fraction,
@@ -380,6 +409,7 @@ class Run_Frame(ttk.Frame):
         self.unmix_num = tk.StringVar(value=10)
         result_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=1,
             to=100000,
             textvariable=self.result_num,
@@ -387,6 +417,7 @@ class Run_Frame(ttk.Frame):
             command = lambda: self.update_params("result_num",int(self.result_num.get())))
         unmix_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=1,
             to=100000,
             textvariable=self.unmix_num,
@@ -448,6 +479,7 @@ class Options_Frame(ttk.Frame):
 
         intensity_eval_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=1,
             textvariable=intensity_eval_weight,
@@ -457,6 +489,7 @@ class Options_Frame(ttk.Frame):
                                                  float(intensity_eval_weight.get())))
         corr_eval_spin_box = ttk.Spinbox(
             self,
+            width=CONFIG_PARAM["spinbox_width"],
             from_=0,
             to=1,
             textvariable=corr_eval_weight,
@@ -806,7 +839,6 @@ class Controller:
 
 if __name__ == "__main__":
     app = App()
-    app.attributes("-topmost",True)
     view = View(app)
     model = Model({},{},{})
     controller = Controller(model, view)
