@@ -36,6 +36,7 @@ from tqdm import tqdm
 import datetime
 
 CONFIG_PARAM = {}
+AFHULYM = "AfHuLym"
 
 class App(tk.Tk):
     def __init__(self):
@@ -717,7 +718,7 @@ class Controller:
             database_df, marker_name_list, marker_abundance_list,             fluor_name_list, fluor_brightness_list, fluor_channel_values_list =             panel_data_preprocessing(abundance_df, brightness_df, target_df, spectra_df, database_df)
 
             start = time.time()
-            self.afhulym = Fluor(name = "AfHuLym", brightness = 1,                            channel_values= spectra_df["AfHuLym"].values)
+            self.afhulym = Fluor(name = AFHULYM, brightness = 1,                            channel_values= spectra_df[AFHULYM].values)
             real_marker_strand = create_marker_strand(marker_name_list, marker_abundance_list)
             real_fluor_strand = create_fluor_strand(fluor_name_list,                                                    fluor_brightness_list, fluor_channel_values_list)
             real_dna = create_dna(real_fluor_strand, real_marker_strand,                                   database_df["Fluor"].values, database_df["Marker"].values,                                 marker_abundance_list, fluor_brightness_list)
@@ -828,6 +829,8 @@ class Controller:
                 markers.append(bond.marker_end.name)
             df.insert(loc = len(df.columns), column = "Marker"+str(count) , value = markers)  
             df.insert(loc = len(df.columns), column = "Fluor"+str(count), value = fluors)
+        # insert AFHULYM to all panel
+        df.loc[len(df)] = [AFHULYM for i in range(len(df.columns))]
         return df 
     
     def download_panel(self, output_name):
