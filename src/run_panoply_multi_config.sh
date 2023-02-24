@@ -10,7 +10,7 @@ echo $SCRIPT_DIR
 for config in $config_dir/*
 do 
 echo $config
-python $SCRIPT_DIR/run_panoply_cmd.py $config $output_folder "$tag_name"_"${config%.*}" --num-panel $num_panel
+nohup python $SCRIPT_DIR/run_panoply_cmd.py $config $output_folder "$tag_name"_"${config%.*}" --num-panel $num_panel &
 done
 
 
