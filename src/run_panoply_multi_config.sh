@@ -9,8 +9,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo $SCRIPT_DIR
 for config in $config_dir/*
 do 
-echo $config
-nohup python $SCRIPT_DIR/run_panoply_cmd.py $config $output_folder "$tag_name"_"${config%.*}" --num-panel $num_panel &
+echo run config: $config
+config_name=$(basename "${config%.}")
+nohup python $SCRIPT_DIR/run_panoply_cmd.py $config $output_folder "$tag_name"_${config_name%.*} --num-panel $num_panel &
 done
-
-
